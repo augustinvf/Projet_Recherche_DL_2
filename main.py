@@ -11,6 +11,7 @@ cycle_number = 1
 epoch_at_each_cycle = 1
 devices = 1
 accelerator = "gpu"
+nb_classes = 10
 
 contrastive_transformations = transforms.Compose(
     [
@@ -40,7 +41,7 @@ train_dataloader = torch.utils.data.DataLoader(
 )
 
 contrastive_model = SimCLR()
-classifier = Classifier()
+classifier = Classifier(contrastive_model.backbone, contrastive_model.output_dim, nb_classes)
 
 for n in range (cycle_number) :
     trainer = pl.Trainer(max_epochs = epoch_at_each_cycle, devices = 1, accelerator = accelerator)
