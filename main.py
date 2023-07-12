@@ -1,16 +1,15 @@
-import pytorch_lightning as pl
 import torch
 import torchvision
 import torchvision.transforms as transforms
 
-from SimCLR import SimCLR, SimCLRTransformation
+from SimCLR import Model, SimCLRTransformation
 from classifier import Classifier
+
+device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
 
 batch_size = 128
 cycle_number = 5
-epoch_at_each_cycle = 1
 devices = 1
-accelerator = "gpu"
 nb_classes = 10
 
 contrastive_transformations = transforms.Compose(
@@ -40,11 +39,7 @@ train_dataloader = torch.utils.data.DataLoader(
     pin_memory=True
 )
 
-contrastive_model = SimCLR()
-classifier = Classifier(contrastive_model.backbone, 1, nb_classes)
 
-for n in range (cycle_number) :
-    trainer = pl.Trainer(max_epochs = epoch_at_each_cycle, devices = 1, accelerator = accelerator)
-    trainer.fit(contrastive_model, train_dataloader)
-    trainer.fit(classifier, train_dataloader)
+
+
 
