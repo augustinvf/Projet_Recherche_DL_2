@@ -11,7 +11,6 @@ class SimCLR(pl.LightningModule):
         super().__init__()
         resnet = torchvision.models.resnet18()
         self.backbone = nn.Sequential(*list(resnet.children())[:-1])
-        self.output_dim = self.backbone[-1].out_features
         self.projection_head = SimCLRProjectionHead(512, 2048, 2048)
         self.criterion = NTXentLoss()
 
