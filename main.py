@@ -3,7 +3,7 @@ import torch
 import torchvision
 import torchvision.transforms as transforms
 
-from SimCLR import SimCLR
+from SimCLR import SimCLR, SimCLRTransformation
 from classifier import Classifier
 
 batch_size = 128
@@ -28,7 +28,7 @@ contrastive_transformations = transforms.Compose(
 train_dataset = torchvision.datasets.CIFAR10(
     root='./data_cifar10_train',
     train=True,
-    transform=contrastive_transformations,
+    transform=SimCLRTransformation(contrastive_transformations, contrastive_transformations),
     download=True
 )
 

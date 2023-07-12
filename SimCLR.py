@@ -30,4 +30,10 @@ class SimCLR(pl.LightningModule):
         optim = torch.optim.SGD(self.parameters(), lr=0.06)
         return optim
     
+class SimCLRTransformation(nn.Module):
+    def __init__(self, transformation1, transformation2) :
+        self.transformation1 = transformation1
+        self.transformation2 = transformation2
+    def __call__(self, x) :
+        return [self.transformation1(x), self.transformation2(x)]
 
