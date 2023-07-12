@@ -7,7 +7,7 @@ from SimCLR import SimCLR
 from classifier import Classifier
 
 batch_size = 128
-cycle_number = 1
+cycle_number = 5
 epoch_at_each_cycle = 1
 devices = 1
 accelerator = "gpu"
