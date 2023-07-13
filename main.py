@@ -74,7 +74,7 @@ for epochs in range(nb_epochs) :
 total_tests = 0
 positive_tests = 0
 
-for mini_batch, labels in train_dataloader :
+for mini_batch, labels in test_dataloader :
 
     mini_batch = mini_batch.to(device)
     labels = labels.to(device)
