@@ -81,7 +81,9 @@ for mini_batch, labels in test_dataloader :
 
     y_hat = model(image_without_augmentation, "supervised")
 
-    total_tests += labels.shape
+    print(labels.shape)
+
+    total_tests += labels.shape[0]
     positive_tests += torch.sum(torch.eq(torch.argmax(y_hat, axis = 1), labels))
 
 
