@@ -5,7 +5,7 @@ import torchvision.transforms as T
 from lightly.transforms.rotation import random_rotation_transform
 from lightly.transforms.gaussian_blur import GaussianBlur
 
-basic_transformation = T.compose(
+basic_transformation = T.Compose(
     [
         T.ToTensor(),
         T.Normalize((0.5,), (0.5,)),
