@@ -46,6 +46,8 @@ for epochs in range(nb_epochs) :
 
         y_hat = model(image_without_augmentation, "supervised")
 
+        accuracy = torch.sum(torch.eq(torch.argmax(y_hat, axis = 1), labels))
+
         loss_su = criterion_su(y_hat, labels)
 
         # reinitialization of the gradients
@@ -56,7 +58,7 @@ for epochs in range(nb_epochs) :
         optimizer_su.step()
         scheduler_su.step()
 
-        wandb.log({"epoch": epochs, "loss self-supervised": loss_ss, "loss supervised": loss_su})
+    wandb.log({"loss self-supervised": loss_ss, "loss supervised": loss_su, "accuracy": accuracy})
 
 
 
