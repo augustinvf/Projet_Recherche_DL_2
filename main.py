@@ -35,6 +35,7 @@ for epochs in range(nb_epochs) :
         # supervised phase
 
         image_without_augmentation = mini_batch[0].to(device)
+        labels = labels.to(device)
 
         y_hat = model(image_without_augmentation, "supervised")
 
