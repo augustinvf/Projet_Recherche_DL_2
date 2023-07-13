@@ -1,45 +1,50 @@
 import torch
-import torchvision
-import torchvision.transforms as transforms
 
-from SimCLR import Model, SimCLRTransformation
-from classifier import Classifier
+from dataloader import train_dataloader
+from utils import model, criterion_ss, optimizer_ss, scheduler_ss, criterion_su, optimizer_su, scheduler_su
 
 device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
+nb_epochs = 10
 
-batch_size = 128
-cycle_number = 5
-devices = 1
-nb_classes = 10
+for epochs in range(nb_epochs) :
+    for mini_batch, labels in train_dataloader :
 
-contrastive_transformations = transforms.Compose(
-    [
-        transforms.RandomHorizontalFlip(),
-        transforms.RandomResizedCrop(size=96),
-        transforms.RandomApply([transforms.ColorJitter(brightness=0.5, contrast=0.5, saturation=0.5, hue=0.1)], p=0.8),
-        transforms.RandomGrayscale(p=0.2),
-        transforms.GaussianBlur(kernel_size=9),
-        transforms.ToTensor(),
-        transforms.Normalize((0.5,), (0.5,)),
-    ]
-)
+        # self-supervised phase
 
-train_dataset = torchvision.datasets.CIFAR10(
-    root='./data_cifar10_train',
-    train=True,
-    transform=SimCLRTransformation(contrastive_transformations, contrastive_transformations),
-    download=True
-)
+        # .to(device)
+        augmented_image1 = mini_batch[1].to(device)
+        augmented_image2 = mini_batch[2].to(device)
 
-train_dataloader = torch.utils.data.DataLoader(
-    dataset=train_dataset,
-    batch_size=batch_size,
-    shuffle=True,
-    drop_last=True,
-    pin_memory=True
-)
+        # forward propagation for both images
+        y_hat_1 = model(augmented_image1, "self-supervised")
+        y_hat_2 = model(augmented_image2, "self-supervised")
 
+        # loss calculation
+        loss_ss = criterion_ss(y_hat_1, y_hat_2)
 
+        # reinitialization of the gradients
+        optimizer_ss.zero_grad()
+
+        # backward propagation
+        loss_ss.backward()
+        optimizer_ss.step()
+        scheduler_ss.step()
+
+        # supervised phase
+
+        image_without_augmentation = mini_batch[0].to(device)
+
+        y_hat = model(image_without_augmentation, "supervised")
+
+        loss_su = criterion_su(y_hat, labels)
+
+        # reinitialization of the gradients
+        optimizer_su.zero_grad()
+
+        # backward propagation
+        loss_su.backward()
+        optimizer_su.step()
+        scheduler_su.step()
 
 
 
