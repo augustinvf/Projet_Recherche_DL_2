@@ -11,7 +11,7 @@ class Model(nn.Module):
         self.classifier = classifier
 
     def forward(self, x, current_phase):
-        if current_phase == "self_supervised" :
+        if current_phase == "self-supervised" :
             x = self.backbone(x).flatten(start_dim=1)
             z = self.projection_head(x)
         elif current_phase == "supervised" :
