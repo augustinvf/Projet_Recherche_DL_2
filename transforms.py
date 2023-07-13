@@ -5,6 +5,13 @@ import torchvision.transforms as T
 from lightly.transforms.rotation import random_rotation_transform
 from lightly.transforms.gaussian_blur import GaussianBlur
 
+basic_transformation = T.compose(
+    [
+        T.ToTensor(),
+        T.Normalize((0.5,), (0.5,)),
+    ]
+)
+
 class MyTransform() :
     def __init__(
         self,
@@ -41,9 +48,10 @@ class MyTransform() :
             T.RandomGrayscale(p=random_gray_scale),
             GaussianBlur(kernel_size=kernel_size, sigmas=sigmas, prob=gaussian_blur),
             T.ToTensor(),
+            T.Normalize((0.5,), (0.5,))
         ]
 
         self.transform = T.Compose(transform)
     
     def __call__(self, image) :
-        return [T.ToTensor()(image), self.transform(image), self.transform(image)]
+        return [basic_transformation(image), self.transform(image), self.transform(image)]
