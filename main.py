@@ -4,6 +4,8 @@ from dataloader import train_dataloader
 from utils import model, criterion_ss, optimizer_ss, scheduler_ss, criterion_su, optimizer_su, scheduler_su
 
 device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
+model = model.to(device)
+
 nb_epochs = 10
 
 for epochs in range(nb_epochs) :
