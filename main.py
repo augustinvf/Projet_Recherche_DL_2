@@ -23,7 +23,7 @@ for epochs in range(nb_epochs) :
 
         # loss calculation
         loss_ss = criterion_ss(y_hat_1, y_hat_2)
-
+        print("loss_ss :", loss_ss)
         # reinitialization of the gradients
         optimizer_ss.zero_grad()
 
@@ -39,6 +39,7 @@ for epochs in range(nb_epochs) :
         y_hat = model(image_without_augmentation, "supervised")
 
         loss_su = criterion_su(y_hat, labels)
+        print("loss_su :", loss_ss)
 
         # reinitialization of the gradients
         optimizer_su.zero_grad()

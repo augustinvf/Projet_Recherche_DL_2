@@ -9,8 +9,8 @@ from model import Model
 
 nb_classes = 10
 
-projection_head = SimCLRProjectionHead
-classifier = nn.Linear(1, nb_classes)
+projection_head = SimCLRProjectionHead(512, 512, 128)
+classifier = nn.Linear(512, nb_classes)
 
 model = Model(projection_head, classifier)
 
