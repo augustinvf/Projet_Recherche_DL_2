@@ -14,6 +14,7 @@ device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
 model = model.to(device)
 
 nb_epochs = 1
+c = 0
 
 # training
 
@@ -62,7 +63,11 @@ for epochs in range(nb_epochs) :
 
         wandb.log({"loss self-supervised": loss_ss, "loss supervised": loss_su, "accuracy": accuracy})
 
-        break
+        c += 1
+
+        if c == 6 :
+
+            break
 
 # test
 
