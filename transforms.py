@@ -46,4 +46,4 @@ class MyTransform() :
         self.transform = T.Compose(transform)
     
     def __call__(self, image) :
-        return [image, self.transform(image), self.transform(image)]
+        return [T.ToTensor(image), self.transform(image), self.transform(image)]
