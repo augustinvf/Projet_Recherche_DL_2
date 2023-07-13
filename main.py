@@ -13,7 +13,7 @@ wandb.init(
 device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
 model = model.to(device)
 
-nb_epochs = 10
+nb_epochs = 1
 
 # training
 
@@ -60,7 +60,9 @@ for epochs in range(nb_epochs) :
         optimizer_su.step()
         scheduler_su.step()
 
-    wandb.log({"loss self-supervised": loss_ss, "loss supervised": loss_su, "accuracy": accuracy})
+        wandb.log({"loss self-supervised": loss_ss, "loss supervised": loss_su, "accuracy": accuracy})
+
+        break
 
 # test
 
