@@ -49,6 +49,8 @@ for epochs in range(nb_epochs) :
 
         y_hat = model(image_without_augmentation, "supervised")
 
+        print(y_hat.shape[0])
+
         accuracy = torch.sum(torch.eq(torch.argmax(y_hat, axis = 1), labels)) / y_hat.shape[0]
 
         loss_su = criterion_su(y_hat, labels)
@@ -63,12 +65,6 @@ for epochs in range(nb_epochs) :
 
         wandb.log({"loss self-supervised": loss_ss, "loss supervised": loss_su, "accuracy": accuracy})
 
-        c += 1
-
-        if c == 6 :
-
-            break
-
 # test
 
 total_tests = 0
@@ -80,8 +76,6 @@ for mini_batch, labels in test_dataloader :
     labels = labels.to(device)
 
     y_hat = model(image_without_augmentation, "supervised")
-
-    print(labels.shape)
 
     total_tests += labels.shape[0]
     positive_tests += torch.sum(torch.eq(torch.argmax(y_hat, axis = 1), labels))
