@@ -1,7 +1,14 @@
+import wandb
+wandb.login()
+
 import torch
 
 from dataloader import train_dataloader
 from utils import model, criterion_ss, optimizer_ss, scheduler_ss, criterion_su, optimizer_su, scheduler_su
+
+wandb.init(
+    project = "deep_learning_project_2",
+)
 
 device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
 model = model.to(device)
@@ -48,6 +55,8 @@ for epochs in range(nb_epochs) :
         loss_su.backward()
         optimizer_su.step()
         scheduler_su.step()
+
+        wandb.log({"epoch": epochs, "loss self-supervised": loss_ss, "loss supervised": loss_su})
 
 
 
