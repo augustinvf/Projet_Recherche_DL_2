@@ -13,8 +13,7 @@ wandb.init(
 device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
 model = model.to(device)
 
-nb_epochs = 1
-c = 0
+nb_epochs = 100
 
 # training
 
@@ -49,8 +48,6 @@ for epochs in range(nb_epochs) :
 
         y_hat = model(image_without_augmentation, "supervised")
 
-        print(y_hat.shape[0])
-
         accuracy = torch.sum(torch.eq(torch.argmax(y_hat, axis = 1), labels)) / y_hat.shape[0]
 
         loss_su = criterion_su(y_hat, labels)
@@ -63,7 +60,7 @@ for epochs in range(nb_epochs) :
         optimizer_su.step()
         scheduler_su.step()
 
-        wandb.log({"loss self-supervised": loss_ss, "loss supervised": loss_su, "accuracy": accuracy})
+        wandb.log({"loss self-supervised": loss_ss, "loss supervised": loss_su, "accuracy": accuracy, "scheduler self-supervised": scheduler_ss, "scheduler supervised":scheduler_su})
 
 # test
 
@@ -79,7 +76,5 @@ for mini_batch, labels in test_dataloader :
 
     total_tests += labels.shape[0]
     positive_tests += torch.sum(torch.eq(torch.argmax(y_hat, axis = 1), labels))
-
-
 
 wandb.log({"final accuracy" : positive_tests / total_tests})
