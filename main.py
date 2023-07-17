@@ -3,7 +3,7 @@ wandb.login()
 
 import torch
 
-from dataloader import train_dataloader, test_dataloader
+from dataloader import train_dataloader_self_supervised, train_dataloader_supervised, test_dataloader
 from utils import model, criterion_ss, optimizer_ss, scheduler_ss, criterion_su, optimizer_su, scheduler_su
 
 wandb.init(
@@ -19,7 +19,7 @@ nb_epochs = 100
 # training
 
 for epochs in range(nb_epochs) :
-    for mini_batch, labels in train_dataloader :
+    for mini_batch, labels in train_dataloader_self_supervised :
 
         # self-supervised phase
 
@@ -42,10 +42,10 @@ for epochs in range(nb_epochs) :
         optimizer_ss.step()
         scheduler_ss.step()
 
-    for mini_batch, labels in train_dataloader :
+    for mini_batch, labels in train_dataloader_supervised :
 
         # supervised phase
-        image_without_augmentation = mini_batch[0].to(device)
+        image_without_augmentation = mini_batch.to(device)
         labels = labels.to(device)
 
         y_hat = model(image_without_augmentation, "supervised")

@@ -8,6 +8,7 @@ from lightly.transforms.gaussian_blur import GaussianBlur
 basic_transformation = T.Compose(
     [
         T.ToTensor(),
+        T.Resize((32, 32)),
         T.Normalize(mean = [0.4914, 0.4822, 0.4465], std = [0.2470, 0.2435, 0.2616])
     ]
 )
@@ -40,7 +41,7 @@ class MyTransform() :
         )
 
         transform = [
-            T.RandomResizedCrop(size=input_size, scale=(min_scale, 1.0)),
+            T.RandomCrop(input_size, padding=4),
             random_rotation_transform(rr_prob=rr_prob, rr_degrees=rr_degrees),
             T.RandomHorizontalFlip(p=hf_prob),
             T.RandomVerticalFlip(p=vf_prob),
@@ -54,4 +55,4 @@ class MyTransform() :
         self.transform = T.Compose(transform)
     
     def __call__(self, image) :
-        return [basic_transformation(image), self.transform(image), self.transform(image)]
+        return [self.transform(image), self.transform(image)]
