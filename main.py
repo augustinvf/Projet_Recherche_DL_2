@@ -8,7 +8,7 @@ from utils import model, criterion_ss, optimizer_ss, scheduler_ss, criterion_su,
 
 wandb.init(
     project = "deep_learning_project_2",
-    name = "Run_test_1"
+    name = "Run_test_2"
 )
 
 device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
