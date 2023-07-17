@@ -42,10 +42,6 @@ for epochs in range(nb_epochs) :
         optimizer_ss.step()
         scheduler_ss.step()
 
-        print(optimizer_ss.param_groups[0]["lr"])
-        print("type pb", (optimizer_ss.param_groups[0]["lr"]))
-        print("type loss", (loss_ss))
-
     for mini_batch, labels in train_dataloader :
 
         # supervised phase
