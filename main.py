@@ -66,8 +66,8 @@ for epochs in range(nb_epochs) :
     wandb.log({"loss self-supervised": loss_ss, 
                "loss supervised": loss_su, 
                "accuracy": accuracy, 
-               "scheduler self-supervised": scheduler_ss.get_lr(), 
-               "scheduler supervised":scheduler_su.get_lr()
+               "scheduler self-supervised": scheduler_ss.get_lr()[epochs], 
+               "scheduler supervised":scheduler_su.get_lr()[epochs]
                })
 
 # test
