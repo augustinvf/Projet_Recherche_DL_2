@@ -43,14 +43,14 @@ for epochs in range(nb_epochs) :
         scheduler_ss.step()
 
         print(optimizer_ss.param_groups[0]["lr"])
-        print("type pb", type(optimizer_ss.param_groups[0]["lr"]))
-        print("type loss", type(loss_ss))
+        print("type pb", (optimizer_ss.param_groups[0]["lr"]))
+        print("type loss", (loss_ss))
 
         wandb.log({"loss self-supervised": loss_ss, 
                "loss supervised": loss_ss,
                "accuracy": loss_ss, 
-               "scheduler self-supervised": optimizer_ss.param_groups[0]["lr"], 
-               "scheduler supervised": 0.5
+               "scheduler self-supervised": torch.tensor(scheduler_ss.get_last_lr()), 
+               "scheduler supervised": torch.tensor(scheduler_ss.get_last_lr())
                })
 
     for mini_batch, labels in train_dataloader :
