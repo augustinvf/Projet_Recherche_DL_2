@@ -24,8 +24,8 @@ for epochs in range(nb_epochs) :
         # self-supervised phase
 
         # .to(device)
-        augmented_image1 = mini_batch[1].to(device)
-        augmented_image2 = mini_batch[2].to(device)
+        augmented_image1 = mini_batch[0].to(device)
+        augmented_image2 = mini_batch[1].to(device)
 
         # forward propagation for both images
         y_hat_1 = model(augmented_image1, "self-supervised")
