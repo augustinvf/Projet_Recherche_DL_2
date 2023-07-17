@@ -44,9 +44,9 @@ for epochs in range(nb_epochs) :
 
         wandb.log({"loss self-supervised": loss_ss, 
                "loss supervised": loss_ss,
-               "accuracy": accuracy, 
+               "accuracy": loss_ss, 
                "scheduler self-supervised": scheduler_ss.get_lr()[epochs], 
-               "scheduler supervised":scheduler_su.get_lr()[epochs]
+               "scheduler supervised":scheduler_ss.get_lr()[epochs]
                })
 
     for mini_batch, labels in train_dataloader :
