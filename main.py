@@ -46,17 +46,9 @@ for epochs in range(nb_epochs) :
         print("type pb", (optimizer_ss.param_groups[0]["lr"]))
         print("type loss", (loss_ss))
 
-        wandb.log({"loss self-supervised": loss_ss, 
-               "loss supervised": loss_ss,
-               "accuracy": loss_ss, 
-               "scheduler self-supervised": torch.tensor(scheduler_ss.get_last_lr()), 
-               "scheduler supervised": torch.tensor(scheduler_ss.get_last_lr())
-               })
-
     for mini_batch, labels in train_dataloader :
 
         # supervised phase
-
         image_without_augmentation = mini_batch[0].to(device)
         labels = labels.to(device)
 
@@ -73,6 +65,11 @@ for epochs in range(nb_epochs) :
         loss_su.backward()
         optimizer_su.step()
         scheduler_su.step()
+
+    wandb.log({"loss self-supervised": loss_ss, 
+               "loss supervised": loss_su,
+               "accuracy": accuracy,
+            })
 
 # test
 
