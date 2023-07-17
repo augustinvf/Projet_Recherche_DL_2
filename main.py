@@ -43,7 +43,8 @@ for epochs in range(nb_epochs) :
         scheduler_ss.step()
 
         print(optimizer_ss.param_groups[0]["lr"])
-        print(type(optimizer_ss.param_groups[0]["lr"]))
+        print("type pb", type(optimizer_ss.param_groups[0]["lr"]))
+        print("type loss", type(loss_ss))
 
         wandb.log({"loss self-supervised": loss_ss, 
                "loss supervised": loss_ss,
