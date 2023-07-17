@@ -42,6 +42,8 @@ for epochs in range(nb_epochs) :
         optimizer_ss.step()
         scheduler_ss.step()
 
+    for mini_batch, labels in train_dataloader :
+
         # supervised phase
 
         image_without_augmentation = mini_batch[0].to(device)
