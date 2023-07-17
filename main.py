@@ -61,9 +61,16 @@ for epochs in range(nb_epochs) :
         optimizer_su.step()
         scheduler_su.step()
 
-    wandb.log({"loss self-supervised": loss_ss, "loss supervised": loss_su, "accuracy": accuracy, "scheduler self-supervised": scheduler_ss.get_lr(), "scheduler supervised":scheduler_su.get_lr()})
+    wandb.log({"loss self-supervised": loss_ss, 
+               "loss supervised": loss_su, 
+               "accuracy": accuracy, 
+               "scheduler self-supervised": scheduler_ss.get_lr(), 
+               "scheduler supervised":scheduler_su.get_lr()
+               })
 
 # test
+
+model.eval()
 
 total_tests = 0
 positive_tests = 0
@@ -73,7 +80,8 @@ for mini_batch, labels in test_dataloader :
     mini_batch = mini_batch.to(device)
     labels = labels.to(device)
 
-    y_hat = model(image_without_augmentation, "supervised")
+    with torch.no_grad() :
+        y_hat = model(image_without_augmentation, "supervised")
 
     total_tests += labels.shape[0]
     positive_tests += torch.sum(torch.eq(torch.argmax(y_hat, axis = 1), labels))
