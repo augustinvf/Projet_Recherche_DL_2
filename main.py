@@ -58,7 +58,7 @@ for epochs in range(nb_epochs) :
 
     #     # loss calculation
     #     loss_ss = criterion_ss(y_hat_1, y_hat_2)
-    #     sum_loss_ss += loss_ss
+    #     sum_loss_ss += loss_ss.detach()
 
     #     # backward propagation
     #     loss_ss.backward()
@@ -80,7 +80,7 @@ for epochs in range(nb_epochs) :
         accuracy += torch.sum(torch.eq(torch.argmax(y_hat, axis = 1), labels))
 
         loss_su = criterion_su(y_hat, labels)
-        sum_loss_su += loss_su
+        sum_loss_su += loss_su.detach()
 
         # backward propagation
         loss_su.backward()
