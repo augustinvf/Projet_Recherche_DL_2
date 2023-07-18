@@ -90,10 +90,6 @@ for epochs in range(nb_epochs) :
         optimizer_su.step()
         scheduler_su.step()
 
-    print(scheduler_ss.get_last_lr())
-    print(type(scheduler_ss.get_last_lr()))
-    print(type(scheduler_ss.get_last_lr()[0]))
-    
     wandb.log({"loss self-supervised": sum_loss_ss/nb_steps, 
                "loss supervised": sum_loss_su/nb_steps,
                "accuracy": accuracy/(batch_size*nb_steps),
