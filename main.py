@@ -7,7 +7,7 @@ import torch.nn as nn
 from lightly.models.modules import SimCLRProjectionHead
 from lightly.loss import NTXentLoss
 
-from dataloader import train_dataloader_self_supervised, train_dataloader_supervised, test_dataloader, batch_size, train_dataset_self_supervised
+from dataloader import train_dataloader_self_supervised, train_dataloader_supervised, test_dataloader, batch_size
 from model import Model
 
 wandb.init(
@@ -17,18 +17,16 @@ wandb.init(
 
 device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
 
-print(len(train_dataset_self_supervised))
-print(len(train_dataloader_supervised))
-
 nb_classes = 10
 input_size_classifier = 512
 projection_head = SimCLRProjectionHead(512, 512, 128)
+nb_steps = len(train_dataloader_supervised)
 
 model = Model(projection_head, input_size_classifier, nb_classes).to(device)
 
 criterion_ss = NTXentLoss()
 optimizer_ss = torch.optim.Adam(model.parameters(), 0.0003, weight_decay=1e-4)
-scheduler_ss = torch.optim.lr_scheduler.CosineAnnealingLR(optimizer_ss, T_max=len(train_dataset_self_supervised), eta_min=0,
+scheduler_ss = torch.optim.lr_scheduler.CosineAnnealingLR(optimizer_ss, T_max=nb_steps, eta_min=0,
                                                            last_epoch=-1)
 
 criterion_su = nn.CrossEntropyLoss()
@@ -37,6 +35,9 @@ scheduler_su = torch.optim.lr_scheduler.StepLR(optimizer_su, step_size=10, gamma
 
 nb_epochs = 100
 accuracy = 0
+
+sum_loss_ss = 0
+sum_loss_su = 0
 
 # training
 
@@ -55,6 +56,7 @@ for epochs in range(nb_epochs) :
 
         # loss calculation
         loss_ss = criterion_ss(y_hat_1, y_hat_2)
+        sum_loss_ss += loss_ss
 
         # reinitialization of the gradients
         optimizer_ss.zero_grad()
@@ -75,6 +77,7 @@ for epochs in range(nb_epochs) :
         accuracy += torch.sum(torch.eq(torch.argmax(y_hat, axis = 1), labels))
 
         loss_su = criterion_su(y_hat, labels)
+        sum_loss_su += loss_su
 
         # reinitialization of the gradients
         optimizer_su.zero_grad()
@@ -84,8 +87,8 @@ for epochs in range(nb_epochs) :
         optimizer_su.step()
         scheduler_su.step()
 
-    wandb.log({"loss self-supervised": loss_ss, 
-               "loss supervised": loss_su,
+    wandb.log({"loss self-supervised": sum_loss_ss/nb_steps, 
+               "loss supervised": sum_loss_su/nb_steps,
                "accuracy": accuracy/batch_size,
             })
 
