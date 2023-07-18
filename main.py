@@ -27,12 +27,12 @@ model = Model(projection_head, input_size_classifier, nb_classes).to(device)
 
 criterion_ss = NTXentLoss()
 optimizer_ss = torch.optim.Adam(model.parameters(), 0.0003, weight_decay=1e-4)
-scheduler_ss = torch.optim.lr_scheduler.CosineAnnealingLR(optimizer_ss, T_max=nb_epochs, eta_min=0,
+scheduler_ss = torch.optim.lr_scheduler.CosineAnnealingLR(optimizer_ss, T_max=nb_steps*nb_epochs, eta_min=0,
                                                            last_epoch=-1)
 
 criterion_su = nn.CrossEntropyLoss()
 optimizer_su = torch.optim.Adam(model.parameters(), 0.001, weight_decay=1e-5)
-scheduler_su = torch.optim.lr_scheduler.CosineAnnealingLR(optimizer_su, T_max=nb_epochs, eta_min=0,
+scheduler_su = torch.optim.lr_scheduler.CosineAnnealingLR(optimizer_su, T_max=nb_steps*nb_epochs, eta_min=0,
                                                            last_epoch=-1)
 
 # training
@@ -66,27 +66,27 @@ for epochs in range(nb_epochs) :
     
     scheduler_ss.step()
 
-    # for mini_batch, labels in train_dataloader_supervised :
+    for mini_batch, labels in train_dataloader_supervised :
 
-    #     # reinitialization of the gradients
-    #     optimizer_su.zero_grad()
+        # reinitialization of the gradients
+        optimizer_su.zero_grad()
 
-    #     # supervised phase
-    #     image_without_augmentation = mini_batch.to(device)
-    #     labels = labels.to(device)
+        # supervised phase
+        image_without_augmentation = mini_batch.to(device)
+        labels = labels.to(device)
 
-    #     y_hat = model(image_without_augmentation, "supervised")
+        y_hat = model(image_without_augmentation, "supervised")
 
-    #     accuracy += torch.sum(torch.eq(torch.argmax(y_hat, axis = 1), labels))
+        accuracy += torch.sum(torch.eq(torch.argmax(y_hat, axis = 1), labels))
 
-    #     loss_su = criterion_su(y_hat, labels)
-    #     sum_loss_su += loss_su.detach()
+        loss_su = criterion_su(y_hat, labels)
+        sum_loss_su += loss_su.detach()
 
-    #     # backward propagation
-    #     loss_su.backward()
-    #     optimizer_su.step()
+        # backward propagation
+        loss_su.backward()
+        optimizer_su.step()
     
-    # scheduler_su.step()
+    scheduler_su.step()
 
     wandb.log({"loss self-supervised": sum_loss_ss/nb_steps, 
                "loss supervised": sum_loss_su/nb_steps,
