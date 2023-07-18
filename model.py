@@ -3,12 +3,12 @@ import torchvision
 import torch.nn as nn
 
 class Model(nn.Module):
-    def __init__(self, projection_head, classifier):
+    def __init__(self, projection_head, input_size_classifier, nb_classes):
         super().__init__()
         resnet = torchvision.models.resnet18()
         self.backbone = nn.Sequential(*list(resnet.children())[:-1])
         self.projection_head = projection_head
-        self.classifier = classifier
+        self.classifier = nn.Linear(input_size_classifier, nb_classes)
 
     def forward(self, x, current_phase):
         if current_phase == "self-supervised" :

@@ -2,9 +2,13 @@ import wandb
 wandb.login()
 
 import torch
+import torch.nn as nn
 
-from dataloader import train_dataloader_self_supervised, train_dataloader_supervised, test_dataloader
-from utils import model, criterion_ss, optimizer_ss, scheduler_ss, criterion_su, optimizer_su, scheduler_su
+from lightly.models.modules import SimCLRProjectionHead
+from lightly.loss import NTXentLoss
+
+from dataloader import train_dataloader_self_supervised, train_dataloader_supervised, test_dataloader, batch_size, train_dataset_self_supervised
+from model import Model
 
 wandb.init(
     project = "deep_learning_project_2",
@@ -12,9 +16,26 @@ wandb.init(
 )
 
 device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
-model = model.to(device)
+
+print(len(train_dataset_self_supervised))
+
+nb_classes = 10
+input_size_classifier = 512
+projection_head = SimCLRProjectionHead(512, 512, 128)
+
+model = Model(projection_head, input_size_classifier, nb_classes).to(device)
+
+criterion_ss = NTXentLoss()
+optimizer_ss = torch.optim.Adam(model.parameters(), 0.0003, weight_decay=1e-4)
+scheduler_ss = torch.optim.lr_scheduler.CosineAnnealingLR(optimizer_ss, T_max=len(train_dataset_self_supervised), eta_min=0,
+                                                           last_epoch=-1)
+
+criterion_su = nn.CrossEntropyLoss()
+optimizer_su = torch.optim.Adam(model.parameters(), 0.001, weight_decay=1e-5)
+scheduler_su = torch.optim.lr_scheduler.StepLR(optimizer_su, step_size=10, gamma=0.1)
 
 nb_epochs = 100
+accuracy = 0
 
 # training
 
@@ -50,7 +71,7 @@ for epochs in range(nb_epochs) :
 
         y_hat = model(image_without_augmentation, "supervised")
 
-        accuracy = torch.sum(torch.eq(torch.argmax(y_hat, axis = 1), labels)) / y_hat.shape[0]
+        accuracy += torch.sum(torch.eq(torch.argmax(y_hat, axis = 1), labels))
 
         loss_su = criterion_su(y_hat, labels)
 
@@ -64,7 +85,7 @@ for epochs in range(nb_epochs) :
 
     wandb.log({"loss self-supervised": loss_ss, 
                "loss supervised": loss_su,
-               "accuracy": accuracy,
+               "accuracy": accuracy/batch_size,
             })
 
 # test
