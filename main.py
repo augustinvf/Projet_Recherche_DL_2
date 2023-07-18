@@ -18,6 +18,7 @@ wandb.init(
 device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
 
 print(len(train_dataset_self_supervised))
+print(len(train_dataloader_supervised))
 
 nb_classes = 10
 input_size_classifier = 512
