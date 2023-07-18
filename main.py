@@ -34,14 +34,13 @@ optimizer_su = torch.optim.Adam(model.parameters(), 0.001, weight_decay=1e-5)
 scheduler_su = torch.optim.lr_scheduler.StepLR(optimizer_su, step_size=10, gamma=0.1)
 
 nb_epochs = 100
-accuracy = 0
-
-sum_loss_ss = 0
-sum_loss_su = 0
 
 # training
 
 for epochs in range(nb_epochs) :
+    sum_loss_ss = 0
+    sum_loss_su = 0
+    accuracy = 0
     for mini_batch, labels in train_dataloader_self_supervised :
 
         # self-supervised phase
