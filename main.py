@@ -41,30 +41,30 @@ for epochs in range(nb_epochs) :
     sum_loss_ss = 0
     sum_loss_su = 0
     accuracy = 0
-    for mini_batch, labels in train_dataloader_self_supervised :
+    # for mini_batch, labels in train_dataloader_self_supervised :
 
-        # reinitialization of the gradients
-        optimizer_ss.zero_grad()
+    #     # reinitialization of the gradients
+    #     optimizer_ss.zero_grad()
 
-        # self-supervised phase
+    #     # self-supervised phase
 
-        # .to(device)
-        augmented_image1 = mini_batch[0].to(device)
-        augmented_image2 = mini_batch[1].to(device)
+    #     # .to(device)
+    #     augmented_image1 = mini_batch[0].to(device)
+    #     augmented_image2 = mini_batch[1].to(device)
 
-        # forward propagation for both images
-        y_hat_1 = model(augmented_image1, "self-supervised")
-        y_hat_2 = model(augmented_image2, "self-supervised")
+    #     # forward propagation for both images
+    #     y_hat_1 = model(augmented_image1, "self-supervised")
+    #     y_hat_2 = model(augmented_image2, "self-supervised")
 
-        # loss calculation
-        loss_ss = criterion_ss(y_hat_1, y_hat_2)
-        sum_loss_ss += loss_ss
+    #     # loss calculation
+    #     loss_ss = criterion_ss(y_hat_1, y_hat_2)
+    #     sum_loss_ss += loss_ss
 
-        # backward propagation
-        loss_ss.backward()
-        optimizer_ss.step()
+    #     # backward propagation
+    #     loss_ss.backward()
+    #     optimizer_ss.step()
     
-    scheduler_ss.step()
+    # scheduler_ss.step()
 
     for mini_batch, labels in train_dataloader_supervised :
 
