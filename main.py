@@ -7,13 +7,17 @@ import torch.nn as nn
 from lightly.models.modules import SimCLRProjectionHead
 from lightly.loss import NTXentLoss
 
-from dataloader import train_dataloader_self_supervised, train_dataloader_supervised, test_dataloader, batch_size
 from model import Model
+from dataloader import train_dataloader_self_supervised, train_dataloader_supervised, test_dataloader, batch_size
+from training import self_supervised_training, supervised_training
+from test import test_fct
 
 wandb.init(
     project = "deep_learning_project_2",
     name = "Run_test_5"
 )
+
+# tool initialization
 
 device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
 
@@ -37,56 +41,15 @@ scheduler_su = torch.optim.lr_scheduler.CosineAnnealingLR(optimizer_su, T_max=nb
 
 # training
 
-for epochs in range(nb_epochs) :
-    sum_loss_ss = 0
-    sum_loss_su = 0
-    accuracy = 0
-    for mini_batch, labels in train_dataloader_self_supervised :
+nb_cycles = 100
+nb_epochs_self_supervised = 10
+nb_epochs_supervised = 1
 
-        # reinitialization of the gradients
-        optimizer_ss.zero_grad()
-
-        # self-supervised phase
-
-        # .to(device)
-        augmented_image1 = mini_batch[0].to(device)
-        augmented_image2 = mini_batch[1].to(device)
-
-        # forward propagation for both images
-        y_hat_1 = model(augmented_image1, "self-supervised")
-        y_hat_2 = model(augmented_image2, "self-supervised")
-
-        # loss calculation
-        loss_ss = criterion_ss(y_hat_1, y_hat_2)
-        sum_loss_ss += loss_ss.detach()
-
-        # backward propagation
-        loss_ss.backward()
-        optimizer_ss.step()
-    
-    scheduler_ss.step()
-
-    for mini_batch, labels in train_dataloader_supervised :
-
-        # reinitialization of the gradients
-        optimizer_su.zero_grad()
-
-        # supervised phase
-        image_without_augmentation = mini_batch.to(device)
-        labels = labels.to(device)
-
-        y_hat = model(image_without_augmentation, "supervised")
-
-        accuracy += torch.sum(torch.eq(torch.argmax(y_hat, axis = 1), labels))
-
-        loss_su = criterion_su(y_hat, labels)
-        sum_loss_su += loss_su.detach()
-
-        # backward propagation
-        loss_su.backward()
-        optimizer_su.step()
-    
-    scheduler_su.step()
+for cycles in range (nb_cycles) :
+    for epochs in range(nb_epochs_self_supervised) :
+        sum_loss_ss = self_supervised_training(device, model, train_dataloader_self_supervised, criterion_ss, optimizer_ss, scheduler_ss)
+    for epochs in range(nb_epochs_supervised) :
+        sum_loss_su, accuracy = supervised_training(device, model, train_dataloader_supervised, criterion_su, optimizer_su, scheduler_su)
 
     wandb.log({"loss self-supervised": sum_loss_ss/nb_steps, 
                "loss supervised": sum_loss_su/nb_steps,
@@ -97,20 +60,5 @@ for epochs in range(nb_epochs) :
 
 # test
 
-model.eval()
-
-total_tests = 0
-positive_tests = 0
-
-for mini_batch, labels in test_dataloader :
-
-    image_without_augmentation = mini_batch.to(device)
-    labels = labels.to(device)
-
-    with torch.no_grad() :
-        y_hat = model(image_without_augmentation, "supervised")
-
-    total_tests += labels.shape[0]
-    positive_tests += torch.sum(torch.eq(torch.argmax(y_hat, axis = 1), labels))
-
-wandb.log({"final accuracy" : positive_tests / total_tests})
+final_accuracy = test_fct(device, model, test_dataloader)
+wandb.log({"final_accuracy": final_accuracy})
