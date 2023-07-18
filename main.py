@@ -39,8 +39,6 @@ print(scheduler_ss.get_last_lr())
 print(type(scheduler_ss.get_last_lr()))
 print(type(scheduler_ss.get_last_lr()[0]))
 
-wandb.log({"lr": scheduler_ss.get_last_lr()[0]})
-
 # training
 
 for epochs in range(nb_epochs) :
@@ -95,6 +93,7 @@ for epochs in range(nb_epochs) :
     wandb.log({"loss self-supervised": sum_loss_ss/nb_steps, 
                "loss supervised": sum_loss_su/nb_steps,
                "accuracy": accuracy/(batch_size*nb_steps),
+               "lr": scheduler_ss.get_last_lr()[0]
             })
 
 # test
