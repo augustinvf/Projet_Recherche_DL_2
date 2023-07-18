@@ -26,7 +26,7 @@ nb_epochs = 100
 model = Model(projection_head, input_size_classifier, nb_classes).to(device)
 
 criterion_ss = NTXentLoss()
-optimizer_ss = torch.optim.Adam(list(model.backbone.parameters()) + list(model.projection.parameters()), 0.0003, weight_decay=1e-4)
+optimizer_ss = torch.optim.Adam(list(model.backbone.parameters()) + list(model.projection_head.parameters()), 0.0003, weight_decay=1e-4)
 scheduler_ss = torch.optim.lr_scheduler.CosineAnnealingLR(optimizer_ss, T_max=nb_epochs, eta_min=0,
                                                            last_epoch=-1)
 
