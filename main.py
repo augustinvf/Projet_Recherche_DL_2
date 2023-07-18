@@ -88,7 +88,7 @@ for epochs in range(nb_epochs) :
 
     wandb.log({"loss self-supervised": sum_loss_ss/nb_steps, 
                "loss supervised": sum_loss_su/nb_steps,
-               "accuracy": accuracy/batch_size,
+               "accuracy": accuracy/(batch_size*nb_steps),
             })
 
 # test
