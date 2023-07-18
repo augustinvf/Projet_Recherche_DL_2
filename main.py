@@ -32,8 +32,10 @@ scheduler_ss = torch.optim.lr_scheduler.CosineAnnealingLR(optimizer_ss, T_max=nb
 
 criterion_su = nn.CrossEntropyLoss()
 optimizer_su = torch.optim.Adam(model.parameters(), 0.001, weight_decay=1e-5)
-scheduler_ss = torch.optim.lr_scheduler.CosineAnnealingLR(optimizer_ss, T_max=nb_steps*nb_epochs, eta_min=0,
+scheduler_su = torch.optim.lr_scheduler.CosineAnnealingLR(optimizer_ss, T_max=nb_steps*nb_epochs, eta_min=0,
                                                            last_epoch=-1)
+
+print(type(scheduler_ss.get_last_lr()))
 
 # training
 
