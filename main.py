@@ -12,7 +12,7 @@ from model import Model
 
 wandb.init(
     project = "deep_learning_project_2",
-    name = "Run_test_4"
+    name = "Run_test_5"
 )
 
 device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
