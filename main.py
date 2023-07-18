@@ -67,7 +67,8 @@ for epochs in range(nb_epochs) :
         # backward propagation
         loss_ss.backward()
         optimizer_ss.step()
-        scheduler_ss.step()
+    
+    scheduler_ss.step()
 
     for mini_batch, labels in train_dataloader_supervised :
 
@@ -88,12 +89,14 @@ for epochs in range(nb_epochs) :
         # backward propagation
         loss_su.backward()
         optimizer_su.step()
-        scheduler_su.step()
+    
+    scheduler_su.step()
 
     wandb.log({"loss self-supervised": sum_loss_ss/nb_steps, 
                "loss supervised": sum_loss_su/nb_steps,
                "accuracy": accuracy/(batch_size*nb_steps),
-               "lr": scheduler_ss.get_last_lr()[0]
+               "learning rate self-supervised": scheduler_ss.get_last_lr()[0],
+               "learning rate supervised": scheduler_su.get_last_lr()[0]
             })
 
 # test
