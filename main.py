@@ -22,6 +22,8 @@ input_size_classifier = 512
 projection_head = SimCLRProjectionHead(512, 512, 128)
 nb_steps = len(train_dataloader_supervised)
 
+print(nb_steps)
+
 model = Model(projection_head, input_size_classifier, nb_classes).to(device)
 
 criterion_ss = NTXentLoss()
@@ -43,6 +45,9 @@ for epochs in range(nb_epochs) :
     accuracy = 0
     for mini_batch, labels in train_dataloader_self_supervised :
 
+        # reinitialization of the gradients
+        optimizer_ss.zero_grad()
+
         # self-supervised phase
 
         # .to(device)
@@ -57,15 +62,15 @@ for epochs in range(nb_epochs) :
         loss_ss = criterion_ss(y_hat_1, y_hat_2)
         sum_loss_ss += loss_ss
 
-        # reinitialization of the gradients
-        optimizer_ss.zero_grad()
-
         # backward propagation
         loss_ss.backward()
         optimizer_ss.step()
         scheduler_ss.step()
 
     for mini_batch, labels in train_dataloader_supervised :
+
+        # reinitialization of the gradients
+        optimizer_su.zero_grad()
 
         # supervised phase
         image_without_augmentation = mini_batch.to(device)
@@ -77,9 +82,6 @@ for epochs in range(nb_epochs) :
 
         loss_su = criterion_su(y_hat, labels)
         sum_loss_su += loss_su
-
-        # reinitialization of the gradients
-        optimizer_su.zero_grad()
 
         # backward propagation
         loss_su.backward()
