@@ -25,7 +25,7 @@ class MyTransform() :
         cj_hue: float = 0.2,
         min_scale: float = 0.08,
         random_gray_scale: float = 0.2,
-        gaussian_blur: float = 0.5,
+        gaussian_blur: float = 0.0,
         kernel_size: Optional[float] = None,
         sigmas: Tuple[float, float] = (0.1, 2),
         vf_prob: float = 0.0,
@@ -41,7 +41,7 @@ class MyTransform() :
         )
 
         transform = [
-            T.RandomCrop(input_size, padding=4),
+            T.RandomResizedCrop(size=input_size, scale=(min_scale, 1.0)),
             random_rotation_transform(rr_prob=rr_prob, rr_degrees=rr_degrees),
             T.RandomHorizontalFlip(p=hf_prob),
             T.RandomVerticalFlip(p=vf_prob),
