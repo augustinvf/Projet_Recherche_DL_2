@@ -39,6 +39,8 @@ print(scheduler_ss.get_last_lr())
 print(type(scheduler_ss.get_last_lr()))
 print(type(scheduler_ss.get_last_lr()[0]))
 
+wandb.log({"lr": scheduler_ss.get_last_lr()[0]})
+
 # training
 
 for epochs in range(nb_epochs) :
