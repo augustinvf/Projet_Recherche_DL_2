@@ -27,13 +27,13 @@ projection_head = SimCLRProjectionHead(512, 512, 128)
 nb_steps = len(train_dataloader_supervised)
 
 nb_cycles = 1
-nb_epochs_self_supervised = 1
+nb_epochs_self_supervised = 100
 nb_epochs_supervised = 100
 
 model = Model(projection_head, input_size_classifier, nb_classes).to(device)
 
 criterion_ss = NTXentLoss()
-optimizer_ss = torch.optim.Adam(list(model.backbone.parameters()) + list(model.projection_head.parameters()), 0.3, weight_decay=1e-5)
+optimizer_ss = torch.optim.Adam(list(model.backbone.parameters()) + list(model.projection_head.parameters()), 0.3, weight_decay=1e-6)
 scheduler_ss = torch.optim.lr_scheduler.CosineAnnealingLR(optimizer_ss, T_max=nb_cycles*nb_epochs_self_supervised, eta_min=0,
                                                            last_epoch=-1)
 
