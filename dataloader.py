@@ -8,7 +8,7 @@ batch_size = 512
 train_dataset_self_supervised = torchvision.datasets.CIFAR10(
     root='./data_cifar10_train',
     train=True,
-    transform=MyTransform(input_size=32, gaussian_blur=0.0),
+    transform=MyTransform(input_size=32, gaussian_blur=0.5),
     download=True
 )
 
