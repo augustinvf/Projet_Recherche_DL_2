@@ -17,8 +17,7 @@ class Model(nn.Module):
             x = self.backbone(x).flatten(start_dim=1)
             z = self.projection_head(x)
         elif current_phase == "supervised" :
-            with torch.no_grad():
-                x = self.backbone(x).flatten(start_dim=1)
+            x = self.backbone(x).flatten(start_dim=1)
             z = self.classifier(x)
         return z
     
