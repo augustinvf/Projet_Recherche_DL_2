@@ -18,7 +18,7 @@ class MyTransform() :
         self,
         input_size: int = 224,
         cj_prob: float = 0.8,
-        cj_strength: float = 1.0,
+        cj_strength: float = 0.5,
         cj_bright: float = 0.8,
         cj_contrast: float = 0.8,
         cj_sat: float = 0.8,

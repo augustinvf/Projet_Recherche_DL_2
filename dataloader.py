@@ -2,15 +2,13 @@ import torch
 import torchvision
 
 from transforms import MyTransform, basic_transformation, test_transformation
-from lightly.transforms.simclr_transform import SimCLRTransform
-
 
 batch_size = 512
 
 train_dataset_self_supervised = torchvision.datasets.CIFAR10(
     root='./data_cifar10_train',
     train=True,
-    transform=SimCLRTransform(input_size=32, gaussian_blur=0.5),
+    transform=MyTransform(input_size=32, gaussian_blur=0.0),
     download=True
 )
 
