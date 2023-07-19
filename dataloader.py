@@ -3,7 +3,7 @@ import torchvision
 
 from transforms import MyTransform, basic_transformation
 
-batch_size = 256
+batch_size = 512
 
 train_dataset_self_supervised = torchvision.datasets.CIFAR10(
     root='./data_cifar10_train',
