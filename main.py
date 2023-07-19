@@ -52,7 +52,7 @@ for cycles in range (nb_cycles) :
                 })
     for epochs in range(nb_epochs_supervised) :
         sum_loss_su, accuracy = supervised_training(device, model, train_dataloader_supervised, criterion_su, optimizer_su, scheduler_su)
-        wandb.log({"loss supervised": sum_loss_ss/nb_steps, 
+        wandb.log({"loss supervised": sum_loss_su/nb_steps, 
                "accuracy supervised": accuracy/(batch_size*nb_steps),
                "learning rate supervised": scheduler_su.get_last_lr()[0]
                 })
