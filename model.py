@@ -7,6 +7,8 @@ class Model(nn.Module):
         super().__init__()
         resnet = torchvision.models.resnet18()
         self.backbone = nn.Sequential(*list(resnet.children())[:-1])
+        self.backbone.conv1 = nn.Conv2d(3, 64, 3, 1, 1, bias=False)
+        self.backbone.maxpool = nn.Identity()
         self.projection_head = projection_head
         self.classifier = nn.Linear(input_size_classifier, nb_classes)
 
