@@ -9,6 +9,7 @@ basic_transformation = T.Compose(
     [
         T.RandomResizedCrop(32),
         T.ToTensor(),
+        T.Normalize(mean = [0.4914, 0.4822, 0.4465], std = [0.2470, 0.2435, 0.2616])
     ]
 )
 
@@ -48,6 +49,7 @@ class MyTransform() :
             T.RandomGrayscale(p=random_gray_scale),
             GaussianBlur(kernel_size=kernel_size, sigmas=sigmas, prob=gaussian_blur),
             T.ToTensor(),
+            T.Normalize(mean = [0.4914, 0.4822, 0.4465], std = [0.2470, 0.2435, 0.2616])
         ]
 
         self.transform = T.Compose(transform)
