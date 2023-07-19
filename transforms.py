@@ -56,3 +56,10 @@ class MyTransform() :
     
     def __call__(self, image) :
         return [self.transform(image), self.transform(image)]
+
+test_transformation = T.Compose(
+    [
+        T.ToTensor(),
+        T.Normalize(mean = [0.4914, 0.4822, 0.4465], std = [0.2470, 0.2435, 0.2616])
+    ]
+)

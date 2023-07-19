@@ -1,7 +1,7 @@
 import torch
 import torchvision
 
-from transforms import MyTransform, basic_transformation
+from transforms import MyTransform, basic_transformation, test_transformation
 
 batch_size = 512
 
@@ -40,7 +40,7 @@ train_dataloader_supervised= torch.utils.data.DataLoader(
 test_dataset = torchvision.datasets.CIFAR10(
     root='./data_cifar10_test',
     train=True,
-    transform=basic_transformation,
+    transform=test_transformation,
     download=True
 )
 
