@@ -7,8 +7,8 @@ from lightly.transforms.gaussian_blur import GaussianBlur
 
 basic_transformation = T.Compose(
     [
+        T.RandomCrop(32, padding=4),
         T.ToTensor(),
-        T.Resize((32, 32)),
         T.Normalize(mean = [0.4914, 0.4822, 0.4465], std = [0.2470, 0.2435, 0.2616])
     ]
 )
@@ -25,7 +25,7 @@ class MyTransform() :
         cj_hue: float = 0.2,
         min_scale: float = 0.08,
         random_gray_scale: float = 0.2,
-        gaussian_blur: float = 0.0,
+        gaussian_blur: float = 0.5,
         kernel_size: Optional[float] = None,
         sigmas: Tuple[float, float] = (0.1, 2),
         vf_prob: float = 0.0,
