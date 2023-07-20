@@ -27,7 +27,7 @@ projection_head = SimCLRProjectionHead(512, 512, 128)
 nb_steps = len(train_dataloader_supervised)
 
 nb_cycles = 1
-nb_epochs_self_supervised = 1
+nb_epochs_self_supervised = 0
 nb_epochs_supervised = 100
 
 model = Model(projection_head, input_size_classifier, nb_classes).to(device)
@@ -52,7 +52,7 @@ for cycles in range (nb_cycles) :
                 })
     for epochs in range(nb_epochs_supervised) :
         sum_loss_su, accuracy = supervised_training(device, model, train_dataloader_supervised, criterion_su, optimizer_su, scheduler_su)
-        wandb.log({"loss supervised": sum_loss_su/nb_steps, 
+        wandb.log({"loss supervised": sum_loss_su/nb_steps,
                "accuracy supervised": accuracy/(batch_size*nb_steps),
                "learning rate supervised": scheduler_su.get_last_lr()[0]
                 })

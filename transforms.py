@@ -23,7 +23,7 @@ class MyTransform() :
         cj_contrast: float = 0.8,
         cj_sat: float = 0.8,
         cj_hue: float = 0.2,
-        min_scale: float = 0.08,
+        min_scale: float = 0.7,
         random_gray_scale: float = 0.2,
         gaussian_blur: float = 0.0,
         kernel_size: Optional[float] = None,
