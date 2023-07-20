@@ -27,7 +27,7 @@ projection_head = SimCLRProjectionHead(512, 512, 128)
 nb_steps = len(train_dataloader_supervised)
 
 nb_cycles = 1
-nb_epochs_self_supervised = 100
+nb_epochs_self_supervised = 0
 nb_epochs_supervised = 100
 
 model = Model(projection_head, input_size_classifier, nb_classes).to(device)
@@ -38,7 +38,7 @@ scheduler_ss = torch.optim.lr_scheduler.CosineAnnealingLR(optimizer_ss, T_max=nb
                                                            last_epoch=-1)
 
 criterion_su = nn.CrossEntropyLoss()
-optimizer_su = torch.optim.SGD(model.classifier.parameters(), lr = 0.1, momentum = 0.9, weight_decay=5e-4)
+optimizer_su = torch.optim.SGD(list(model.backbone.parameters()) + list(model.classifier.parameters()), lr = 0.1, momentum = 0.9, weight_decay=5e-4)
 scheduler_su = torch.optim.lr_scheduler.CosineAnnealingLR(optimizer_su, T_max=nb_cycles*nb_epochs_supervised, eta_min=0,
                                                            last_epoch=-1)
 
