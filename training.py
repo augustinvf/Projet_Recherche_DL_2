@@ -19,7 +19,7 @@ def self_supervised_training(device, model, train_dataloader_self_supervised, cr
 
         # loss calculation
         loss_ss = criterion_ss(y_hat_1, y_hat_2)
-        sum_loss_ss += loss_ss.detach()
+        sum_loss_ss += loss_ss.item()
 
         # backward propagation
         loss_ss.backward()
@@ -46,7 +46,7 @@ def supervised_training(device, model, train_dataloader_supervised, criterion_su
         accuracy += torch.sum(torch.eq(torch.argmax(y_hat, axis = 1), labels))
 
         loss_su = criterion_su(y_hat, labels)
-        sum_loss_su += loss_su.detach()
+        sum_loss_su += loss_su.item()
 
         # backward propagation
         loss_su.backward()
