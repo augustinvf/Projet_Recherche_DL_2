@@ -17,7 +17,7 @@ optimizer_ss:
   params:
     lr: 0.3
     momentum: 0.9
-    weight_decay: 1e-6
+    weight_decay: 0.000001
 
 scheduler_ss:
   name: "CosineAnnealingLR"
@@ -33,7 +33,7 @@ optimizer_su:
   params:
     lr: 0.1
     momentum: 0.9
-    weight_decay: 5e-4
+    weight_decay: 0.0005
 
 scheduler_su:
   name: "CosineAnnealingLR"
