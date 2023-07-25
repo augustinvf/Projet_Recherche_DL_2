@@ -1,0 +1,44 @@
+# Tool initialization
+
+nb_classes: 10
+input_size_classifier: 512
+
+nb_cycles: 1
+nb_epochs_self_supervised_by_cycle: 100
+nb_epochs_supervised_by_cycle: 100
+
+batch_size: 256
+
+# Hyperparameters for the model
+
+criterion_ss:
+  name: "NTXentLoss"
+
+optimizer_ss:
+  name: "SGD"
+  params:
+    lr: 0.3
+    momentum: 0.9
+    weight_decay: 1e-6
+
+scheduler_ss:
+  name: "CosineAnnealingLR"
+  params:
+    T_max: "$(nb_cycles * nb_epochs_self_supervised)"
+    eta_min: 0
+
+criterion_su:
+  name: "CrossEntropyLoss"
+
+optimizer_su:
+  name: "SGD"
+  params:
+    lr: 0.1
+    momentum: 0.9
+    weight_decay: 5e-4
+
+scheduler_su:
+  name: "CosineAnnealingLR"
+  params:
+    T_max: "$(nb_cycles * nb_epochs_supervised)"
+    eta_min: 0

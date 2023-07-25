@@ -1,6 +1,8 @@
 import wandb
 wandb.login()
 
+import omegaconf
+
 import torch
 import torch.nn as nn
 
@@ -12,23 +14,29 @@ from dataloader import train_dataloader_self_supervised, train_dataloader_superv
 from training import self_supervised_training, supervised_training
 from eval import test_fct
 
+# To print the results
+
 wandb.init(
     project = "deep_learning_project_2",
     name = "Run_test_5"
 )
 
+# To load the hyperparameters
+
+config = omegaconf.OmegaConf.load("config.yaml")
+
 # tool initialization
 
 device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
 
-nb_classes = 10
+nb_classes = config.nb_classes
 input_size_classifier = 512
 projection_head = SimCLRProjectionHead(512, 512, 128)
 nb_steps = len(train_dataloader_supervised)
 
 nb_cycles = 1
-nb_epochs_self_supervised = 100
-nb_epochs_supervised = 100
+nb_epochs_self_supervised_by_cycle = 100
+nb_epochs_supervised_by_cycle = 100
 
 model = Model(projection_head, input_size_classifier, nb_classes).to(device)
 
