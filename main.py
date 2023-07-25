@@ -27,7 +27,7 @@ config = omegaconf.OmegaConf.load("config.yaml")
 
 # tool initialization
 
-print(config.optimizer_su.weight_decay)
+print(config.optimizer_su.params.weight_decay)
 
 device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
 
@@ -44,15 +44,16 @@ model = Model(projection_head, input_size_classifier, nb_classes).to(device)
 
 criterion_ss = NTXentLoss()
 optimizer_ss = torch.optim.SGD(list(model.backbone.parameters()) + list(model.projection_head.parameters()), 
-                               config.optimizer_ss.lr, config.optimizer_ss.momentum, config.optimizer_ss.weight_decay)
+                               config.optimizer_ss.params.lr, config.optimizer_ss.params.momentum, 
+                               config.optimizer_ss.params.weight_decay)
 scheduler_ss = torch.optim.lr_scheduler.CosineAnnealingLR(optimizer_ss, T_max=nb_epochs_self_supervised_by_cycle*nb_cycles,
-                                                          eta_min=config.scheduler_ss.eta_min, last_epoch=-1)
+                                                          eta_min=config.scheduler_ss.params.eta_min, last_epoch=-1)
 
 criterion_su = nn.CrossEntropyLoss()
-optimizer_su = torch.optim.SGD(model.classifier.parameters(), config.optimizer_su.lr, 
-                               config.optimizer_su.momentum, config.optimizer_su.weight_decay)
+optimizer_su = torch.optim.SGD(model.classifier.parameters(), config.optimizer_su.params.lr, 
+                               config.optimizer_su.params.momentum, config.optimizer_su.params.weight_decay)
 scheduler_su = torch.optim.lr_scheduler.CosineAnnealingLR(optimizer_su, T_max=nb_epochs_supervised_by_cycle*nb_cycles,
-                                                          eta_min=config.scheduler_su.eta_min, last_epoch=-1)
+                                                          eta_min=config.scheduler_su.params.eta_min, last_epoch=-1)
 
 # training
 
