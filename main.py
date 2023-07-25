@@ -30,6 +30,7 @@ config = omegaconf.OmegaConf.load("config.yaml")
 device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
 
 nb_classes = config.nb_classes
+print(nb_classes)
 input_size_classifier = 512
 projection_head = SimCLRProjectionHead(512, 512, 128)
 nb_steps = len(train_dataloader_supervised)
