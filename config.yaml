@@ -22,7 +22,7 @@ optimizer_ss:
 scheduler_ss:
   name: "CosineAnnealingLR"
   params:
-    T_max: "$(nb_cycles * nb_epochs_self_supervised)"
+    T_max: "$(nb_cycles * nb_epochs_self_supervised_by_cycle)"
     eta_min: 0
 
 criterion_su:
@@ -38,5 +38,5 @@ optimizer_su:
 scheduler_su:
   name: "CosineAnnealingLR"
   params:
-    T_max: "$(nb_cycles * nb_epochs_supervised)"
+    T_max: "$(nb_cycles * nb_epochs_supervised_by_cycle)"
     eta_min: 0
