@@ -27,8 +27,6 @@ config = omegaconf.OmegaConf.load("config.yaml")
 
 # tool initialization
 
-print(config.optimizer_su.params.weight_decay)
-
 device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
 
 nb_classes = config.nb_classes
