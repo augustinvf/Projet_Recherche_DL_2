@@ -27,7 +27,7 @@ config = omegaconf.OmegaConf.load("config.yaml")
 
 # tool initialization
 
-print(config.scheduler_su.T_max)
+print(config.optimizer_su.weight_decay)
 
 device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
 
