@@ -3,7 +3,7 @@ import torch
 def self_supervised_training(device, model, train_dataloader_self_supervised, criterion_ss, optimizer_ss, scheduler_ss):
     sum_loss_ss = 0
     for mini_batch, _ in train_dataloader_self_supervised :
-        print(mini_batch[0].shape)
+
         # reinitialization of the gradients
         optimizer_ss.zero_grad()
 
