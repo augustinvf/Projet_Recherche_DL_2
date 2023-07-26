@@ -26,7 +26,7 @@ class MyTransform() :
         cj_hue: float = 0.2,
         min_scale: float = 0.2,
         random_gray_scale: float = 0.2,
-        gaussian_blur: float = 0.0,
+        gaussian_blur: float = 0.5,
         kernel_size: Optional[float] = None,
         sigmas: Tuple[float, float] = (0.1, 2),
         vf_prob: float = 0.0,

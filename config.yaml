@@ -1,4 +1,8 @@
-# Tool initialization
+# data initialization
+
+batch_size: 128
+
+# tool initialization
 
 nb_classes: 10
 input_size_classifier: 512
@@ -7,7 +11,7 @@ nb_cycles: 1
 nb_epochs_self_supervised_by_cycle: 100
 nb_epochs_supervised_by_cycle: 100
 
-# Hyperparameters for the model
+# hyperparameters for the model
 
 criterion_ss:
   name: "NTXentLoss"

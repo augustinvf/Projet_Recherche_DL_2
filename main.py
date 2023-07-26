@@ -10,7 +10,7 @@ from lightly.models.modules import SimCLRProjectionHead
 from lightly.loss import NTXentLoss
 
 from model import Model
-from dataloader import train_dataloader_self_supervised, train_dataloader_supervised, test_dataloader, batch_size
+from dataloader import initialize_dataloaders
 from training import self_supervised_training, supervised_training
 from eval import test_fct
 
@@ -21,9 +21,15 @@ wandb.init(
     name = "Run_test_5"
 )
 
+
 # To load the hyperparameters
 
 config = omegaconf.OmegaConf.load("config.yaml")
+
+# data initialization
+
+config.batch_size = 128
+train_dataloader_self_supervised, train_dataloader_supervised, test_dataloader, train_dataset_self_supervised = initialize_dataloaders(batch_size)
 
 # tool initialization
 
