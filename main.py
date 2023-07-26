@@ -28,7 +28,7 @@ config = omegaconf.OmegaConf.load("config.yaml")
 
 # data initialization
 
-config.batch_size = 128
+batch_size = config.batch_size
 train_dataloader_self_supervised, train_dataloader_supervised, test_dataloader, train_dataset_self_supervised = initialize_dataloaders(batch_size)
 
 # tool initialization
