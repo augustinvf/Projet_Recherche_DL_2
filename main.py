@@ -70,5 +70,5 @@ for cycles in range (nb_cycles) :
 
 # test
 
-final_accuracy = test_fct(device, model, test_dataloader)
-wandb.log({"final_accuracy": final_accuracy})
+test_accuracy = test_fct(device, model, test_dataloader)
+wandb.log({"test_accuracy": test_accuracy})
