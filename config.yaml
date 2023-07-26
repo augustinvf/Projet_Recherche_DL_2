@@ -8,8 +8,8 @@ nb_classes: 10
 input_size_classifier: 512
 
 nb_cycles: 1
-nb_epochs_self_supervised_by_cycle: 1
-nb_epochs_supervised_by_cycle: 1
+nb_epochs_self_supervised_by_cycle: 100
+nb_epochs_supervised_by_cycle: 100
 
 # hyperparameters for the model
 
